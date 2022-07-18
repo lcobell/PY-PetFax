@@ -1,10 +1,19 @@
 from flask import Flask
+from flask_migrate import Migrate
 
-# app factory
+# factory
 
 
 def create_app():
     app = Flask(__name__)
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Temple07@localhost:5432/petfax'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    from . import models
+    models.db.init_app(app)
+    migrate = Migrate(app, models.db)
+
 # index route
 
     @app.route('/')
